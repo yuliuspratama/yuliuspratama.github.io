@@ -6,75 +6,610 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <title>Homepage</title>
+    <style>
+        :root {
+            --color-light-bg: #f8f9fa;
+            --color-dark-bg: #0d1117;
+            --color-light-text: #212529;
+            --color-dark-text: #c9d1d9;
+            --color-accent: #58a6ff;
+            --transition-speed: 0.6s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            overflow-x: hidden;
+            transition: background-color var(--transition-speed) ease;
+            position: relative;
+        }
+
+        /* Scroll Progress Bar */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 4px;
+            background: linear-gradient(90deg, #58a6ff, #10b981, #f97316);
+            z-index: 9999;
+            transition: width 0.1s ease;
+        }
+
+        /* Navigation Transformation */
+        .navbar {
+            transition: all var(--transition-speed) ease;
+        }
+
+        .navbar-transformed {
+            background-color: rgba(13, 17, 23, 0.95) !important;
+            backdrop-filter: blur(10px);
+        }
+
+        .navbar-transformed .navbar-brand,
+        .navbar-transformed .nav-link {
+            color: var(--color-dark-text) !important;
+        }
+
+        /* Section 1: Junior Front-End Dev */
+        .section-junior {
+            min-height: 100vh;
+            background: var(--color-light-bg);
+            color: var(--color-light-text);
+            transition: all var(--transition-speed) ease;
+            padding: 2rem 0;
+        }
+
+        .section-junior.transforming {
+            background: linear-gradient(180deg, var(--color-light-bg) 0%, #1a1f2e 50%, var(--color-dark-bg) 100%);
+        }
+
+        /* Section 2: Transition */
+        .section-transition {
+            min-height: 100vh;
+            background: linear-gradient(180deg, var(--color-light-bg) 0%, #1a1f2e 50%, var(--color-dark-bg) 100%);
+            color: var(--color-dark-text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .transition-narrative {
+            max-width: 800px;
+            text-align: center;
+            padding: 2rem;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s ease;
+        }
+
+        .transition-narrative.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .transition-narrative h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, #58a6ff, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .transition-narrative p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Section 3: Current State */
+        .section-current {
+            min-height: 100vh;
+            background: var(--color-dark-bg);
+            color: var(--color-dark-text);
+            padding: 4rem 0;
+        }
+
+        .gradient-divider {
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+            margin: 3rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: var(--color-accent);
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .stats-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .stats-container img {
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(88, 166, 255, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .stats-container img:hover {
+            transform: scale(1.05);
+        }
+
+        .tech-stack-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .tech-icon {
+            width: 60px;
+            height: 60px;
+            transition: transform 0.3s ease;
+            filter: drop-shadow(0 4px 8px rgba(88, 166, 255, 0.3));
+        }
+
+        .tech-icon:hover {
+            transform: scale(1.2) rotate(5deg);
+        }
+
+        .badge-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .badge-container img {
+            transition: transform 0.3s ease;
+        }
+
+        .badge-container img:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Card Transformations */
+        .portfolio-card {
+            transition: all var(--transition-speed) ease;
+            border: 1px solid rgba(88, 166, 255, 0.1);
+        }
+
+        .portfolio-card.enhanced {
+            box-shadow: 0 8px 32px rgba(88, 166, 255, 0.3);
+            border: 1px solid rgba(88, 166, 255, 0.5);
+            transform: translateY(-5px);
+        }
+
+        /* Footer Transformation */
+        .footer-transformed {
+            background: linear-gradient(135deg, #0d1117 0%, #1a1f2e 100%) !important;
+        }
+
+        /* Header with gradient */
+        .gradient-header {
+            width: 100%;
+            margin-bottom: 2rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .transition-narrative h2 {
+                font-size: 1.8rem;
+            }
+            .transition-narrative p {
+                font-size: 1rem;
+            }
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+
+        /* Smooth scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
 </head>
 <body>
-    <!-- Navigasi Start  -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="/">Git Portofolio</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link disabled" aria-current="page" href="/">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link disabled" href="/">About</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="https://blog.yuliuspratama.dev/">Blog</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link disabled" href="/">Portofolio List</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link disabled" href="/">Contact</a>
-              </li>
-          </ul>
-            <button class="btn btn-outline-success" type="submit">Resume</button>
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- Navigasi Start -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" id="mainNav">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Git Portofolio</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link disabled" aria-current="page" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="/">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="/">Blog</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="/">Portofolio List</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="/">Contact</a>
+                    </li>
+                </ul>
+                <button class="btn btn-outline-success" type="submit">Resume</button>
+            </div>
         </div>
-      </div>
-  </nav>
-    <!-- Navigasi End  -->
-    <!-- Layout 1 Start -->
-    <div class="container-fluid bg-light text-dark border-top" style="width:100%">
-        <div class="card row align-items-center text-center">
-          <div class="col-10 card-body">
-              <h1  class="card-title" >Selamat datang di Portofolio Saya! </h1>
-              <p class="card-text">Saya seorang junior front-end developer yang senang berbagi beberapa proyek yang telah saya kerjakan di sini. Sebagai seorang yang masih relatif baru di industri ini, saya selalu mencari tahu tentang teknologi terbaru dan memperbaiki keterampilan saya dalam menciptakan pengalaman pengguna yang menarik..</p>
-              <p class="card-text">Portofolio ini berisi beberapa proyek yang telah saya kerjakan dalam perjalanan saya sebagai junior front-end developer. Saya berharap proyek-proyek ini memberikan gambaran tentang keterampilan dan kreativitas saya dalam memecahkan masalah dan menciptakan tampilan yang menarik.</p>
-              <p class="card-text">Terima kasih telah meluangkan waktu untuk melihat-lihat portofolio saya. Saya berharap Anda menemukan sesuatu yang menarik dan jika Anda memiliki saran atau umpan balik, jangan ragu untuk menghubungi saya.</p>
-          </div>
+    </nav>
+    <!-- Navigasi End -->
+
+    <!-- Section 1: Junior Front-End Dev -->
+    <section class="section-junior" id="sectionJunior" data-section="junior">
+        <div class="container-fluid bg-light text-dark border-top" style="width:100%">
+            <div class="card row align-items-center text-center">
+                <div class="col-10 card-body">
+                    <h1 class="card-title">Selamat datang di Portofolio Saya!</h1>
+                    <p class="card-text">Saya seorang junior front-end developer yang senang berbagi beberapa proyek yang telah saya kerjakan di sini. Sebagai seorang yang masih relatif baru di industri ini, saya selalu mencari tahu tentang teknologi terbaru dan memperbaiki keterampilan saya dalam menciptakan pengalaman pengguna yang menarik.</p>
+                    <p class="card-text">Portofolio ini berisi beberapa proyek yang telah saya kerjakan dalam perjalanan saya sebagai junior front-end developer. Saya berharap proyek-proyek ini memberikan gambaran tentang keterampilan dan kreativitas saya dalam memecahkan masalah dan menciptakan tampilan yang menarik.</p>
+                    <p class="card-text">Terima kasih telah meluangkan waktu untuk melihat-lihat portofolio saya. Saya berharap Anda menemukan sesuatu yang menarik dan jika Anda memiliki saran atau umpan balik, jangan ragu untuk menghubungi saya.</p>
+                </div>
+            </div>
+            <!-- Card Portofolio -->
+            <div class="row align-items-center text-center mt-4">
+                <div class="col-12">
+                    <H1>Portofolio</H1>
+                </div>
+            </div>
+            <div class="gap-5 row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4 align-items-center align-self-center justify-content-center text-center mt-4" style="place-items: center;">
+                <div class="col card portfolio-card" style="width: 18rem;" id="portfolioCard">
+                    <img src="https://images.unsplash.com/photo-1544982905-1e48284f80c3?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=800&ixid=MnwxfDB8MXxyYW5kb218MHx8amF2YXNjcmlwdHx8fHx8fDE2NzYzNjA2MjM&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=900" class="card-img-top" alt="vacation">
+                    <div class="card-body">
+                        <h5 class="card-title">Rakamin</h5>
+                        <p class="card-text">Pengerjaan HomeWork Rakamin</p>
+                        <a href="/RakaminHW" class="btn btn-primary">Melihat</a>
+                    </div>
+                </div>
+            </div>
         </div>
-      <!-- Card Portofolio -->
-      <div class="row align-items-center text-center mt-4 ">
-        <div class="col-12">
-            <H1>Portofolio</H1>
+    </section>
+
+    <!-- Section 2: Transition Narrative -->
+    <section class="section-transition" id="sectionTransition" data-section="transition">
+        <div class="transition-narrative" id="transitionNarrative">
+            <h2>💫 Perjalanan Transformasi</h2>
+            <p>
+                <strong>Dari junior front-end developer yang fokus pada UI/UX...</strong>
+                <br>
+                Memulai perjalanan dengan mempelajari dasar-dasar HTML, CSS, dan JavaScript. Berkonsentrasi pada menciptakan pengalaman pengguna yang menarik dan antarmuka yang responsif.
+            </p>
+            <p>
+                <strong>...menjelajahi dunia IoT dan embedded systems...</strong>
+                <br>
+                Rasa ingin tahu membawa saya ke dunia hardware dan Internet of Things. Belajar Arduino, pemrograman C, dan bagaimana menghubungkan perangkat fisik dengan software.
+            </p>
+            <p>
+                <strong>...sampai mendalami AI dan generative technologies...</strong>
+                <br>
+                Eksplorasi terus berlanjut ke teknologi AI modern. Mempelajari Python untuk machine learning, generative AI, dan bagaimana AI dapat meningkatkan produktivitas development.
+            </p>
+            <p>
+                <em>"Perjalanan yang terus berkembang, belajar dengan membangun."</em>
+            </p>
         </div>
-      </div>
-      <div class=" gap-5 row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4 align-items-center align-self-center justify-content-center text-center mt-4  " style="place-items: center;">
-        <div class=" col card" style="width: 18rem;">
-            <img src="https://images.unsplash.com/photo-1544982905-1e48284f80c3?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=800&ixid=MnwxfDB8MXxyYW5kb218MHx8amF2YXNjcmlwdHx8fHx8fDE2NzYzNjA2MjM&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=900" class="card-img-top" alt="vacation">
-            <div class="card-body">
-              <h5 class="card-title">Rakamin</h5>
-              <p class="card-text">Pengerjaan HomeWork Rakamin </p>
-              <a href="/RakaminHW" class="btn btn-primary">Melihat</a>
-          </div>
-          </div>
-      <!-- Card porto folio end -->
-      </div>
-    <!-- Layout 1 End -->
-      <!-- footer start -->
-  <div class="d-flex flex-column h-100">    
-    <footer class="footer mt-auto py-3 bg-primary">
-      <div class="container">
-        <span class="text-light">Dibuat Dengan ❤ Oleh Yulius Pratama </span>
-      </div>
-    </footer>
-  </div>
-  <!-- fotter end -->
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    </section>
+
+    <!-- Section 3: Current State -->
+    <section class="section-current" id="sectionCurrent" data-section="current">
+        <!-- Header dengan gradient effect -->
+        <div class="gradient-header fade-in">
+            <img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=120&section=header&text=Yulius%20Pratama&fontSize=42&fontAlignY=35&animation=twinkling&fontColor=0d1117" alt="Header" />
+        </div>
+
+        <!-- Badges Holopin -->
+        <div class="fade-in text-center" style="margin: 2rem 0;">
+            <a href="https://holopin.io/@yuliuspratama">
+                <img src="https://holopin.me/yuliuspratama" alt="yuliuspratama" />
+            </a>
+        </div>
+
+        <!-- Welcome Section -->
+        <div class="container fade-in text-center" style="max-width: 900px; margin: 2rem auto; padding: 2rem;">
+            <h2 style="color: var(--color-accent); margin-bottom: 1rem;">✨ Hasil Perjalanan Transformasi</h2>
+            <p style="font-size: 1.1rem; line-height: 1.8; margin-bottom: 1.5rem;">
+                Perjalanan dimulai dari junior front-end developer yang fokus pada UI/UX, kemudian berkembang ke dunia IoT dan embedded systems, hingga akhirnya menemukan passion dalam AI dan generative technologies.
+            </p>
+            <p style="font-size: 1.1rem; line-height: 1.8; margin-bottom: 1.5rem;">
+                Setiap fase dalam perjalanan ini memberikan perspektif baru tentang bagaimana teknologi dapat menyelesaikan masalah nyata. Dari membuat antarmuka yang indah, mengontrol perangkat fisik, hingga berkolaborasi dengan AI untuk mempercepat development.
+            </p>
+            <p style="font-size: 1.1rem; line-height: 1.8;">
+                <strong style="color: var(--color-accent);">Saat ini, fokus saya adalah menggabungkan semua pengalaman ini untuk menciptakan solusi yang lebih cerdas dan efisien.</strong>
+            </p>
+        </div>
+
+        <div class="gradient-divider"></div>
+
+        <!-- Achievements & Stats -->
+        <div class="container fade-in">
+            <h2 class="section-title">🏆 Pencapaian & Statistik</h2>
+            <p style="text-align: center; font-size: 1.1rem; margin-bottom: 2rem; color: var(--color-dark-text);">
+                Berikut adalah snapshot dari perjalanan coding saya di GitHub. Setiap commit, setiap project, dan setiap streak adalah bagian dari proses belajar yang tidak pernah berhenti.
+            </p>
+            
+            <!-- GitHub Trophy -->
+            <div class="text-center" style="margin: 2rem 0;">
+                <img src="https://github-profile-trophy.vercel.app/?username=yuliuspratama&theme=radical&no-frame=true&column=6&margin-w=8&margin-h=8&bg_color=0d1117&title_color=58a6ff&rank_icon=github" alt="GitHub Trophies" style="max-width: 100%; height: auto;" />
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-container">
+                <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=yuliuspratama&layout=compact&theme=radical&hide_border=true&bg_color=0d1117&title_color=58a6ff&text_color=c9d1d9&langs_count=8" alt="Top Languages" />
+                <img src="https://github-readme-stats.vercel.app/api?username=yuliuspratama&theme=radical&hide_border=true&show_icons=true&bg_color=0d1117&title_color=58a6ff&text_color=c9d1d9&icon_color=58a6ff&ring_color=58a6ff&hide_title=true" alt="GitHub Stats" />
+            </div>
+
+            <!-- Streak Stats -->
+            <div class="text-center" style="margin: 2rem 0;">
+                <p style="font-size: 1rem; margin-bottom: 1rem; color: var(--color-dark-text);">
+                    <i>Konsistensi dalam coding adalah kunci untuk terus berkembang</i>
+                </p>
+                <img src="https://github-readme-streak-stats.herokuapp.com/?user=yuliuspratama&theme=radical&hide_border=true&background=0d1117&ring=58a6ff&fire=58a6ff&currStreakLabel=58a6ff&sideNums=58a6ff&sideLabels=c9d1d9&dates=c9d1d9" alt="Streak Stats" style="max-width: 100%; height: auto;" />
+            </div>
+        </div>
+
+        <div class="gradient-divider"></div>
+
+        <!-- Current Focus -->
+        <div class="container fade-in text-center">
+            <h2 class="section-title">🎯 Fokus Saat Ini</h2>
+            <p style="font-size: 1.1rem; margin-bottom: 2rem; color: var(--color-dark-text);">
+                Transformasi tidak berhenti di sini. Saat ini saya sedang mendalami teknologi AI yang dapat mengubah cara kita berinteraksi dengan kode dan development process.
+            </p>
+            <div class="badge-container">
+                <img alt="Generative AI" src="https://img.shields.io/badge/🧠%20Generative%20AI-100000?style=for-the-badge&logo=openai&logoColor=white&color=10B981" />
+                <img alt="AI Coding Assistant" src="https://img.shields.io/badge/🤖%20AI-Assisted%20Coding-F97316?style=for-the-badge&logo=githubcopilot&logoColor=white" />
+            </div>
+            <div style="max-width: 800px; margin: 2rem auto; padding: 1rem;">
+                <p style="font-size: 1.1rem; margin-bottom: 1rem; line-height: 1.8;">
+                    <strong style="color: var(--color-accent);">Mengapa AI dalam Development?</strong>
+                </p>
+                <p style="line-height: 1.8; color: var(--color-dark-text);">
+                    Setelah melalui perjalanan dari front-end ke IoT, saya melihat potensi besar AI dalam mengoptimalkan workflow development. 
+                    Bukan tentang menggantikan developer, melainkan tentang bagaimana AI dapat menjadi partner yang powerful untuk menghasilkan 
+                    code yang lebih baik, lebih cepat, dan lebih efisien. Ini adalah langkah natural dari perjalanan transformasi yang sudah dimulai.
+                </p>
+            </div>
+        </div>
+
+        <div class="gradient-divider"></div>
+
+        <!-- Skills Evolution -->
+        <div class="container fade-in text-center">
+            <h2 class="section-title">📚 Evolusi Skills</h2>
+            <p style="font-size: 1.1rem; margin-bottom: 2rem; color: var(--color-dark-text);">
+                Setiap teknologi yang dipelajari membawa saya ke level berikutnya. Dari front-end yang fokus pada visual, 
+                ke embedded systems yang bekerja dengan hardware, hingga AI yang membuka kemungkinan baru.
+            </p>
+
+            <div style="margin: 2rem 0;">
+                <h3 style="color: var(--color-accent); margin-bottom: 1.5rem;">💻 Bahasa Pemrograman yang Dikuasai</h3>
+                <p style="font-size: 0.95rem; margin-bottom: 1.5rem; color: var(--color-dark-text);">
+                    Python untuk AI dan automation, C untuk embedded systems dan low-level programming
+                </p>
+                <div class="tech-stack-grid">
+                    <a href="https://www.python.org" target="_blank" rel="noreferrer">
+                        <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" alt="Python" class="tech-icon" title="Python">
+                    </a>
+                    <a href="https://www.cprogramming.com/" target="_blank" rel="noreferrer">
+                        <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/c/c-original.svg" alt="C" class="tech-icon" title="C Programming">
+                    </a>
+                </div>
+            </div>
+
+            <div style="margin: 2rem 0;">
+                <h3 style="color: var(--color-accent); margin-bottom: 1.5rem;">🔧 Hardware & Embedded Systems</h3>
+                <p style="font-size: 0.95rem; margin-bottom: 1.5rem; color: var(--color-dark-text);">
+                    Pengalaman dengan Arduino dan IoT membuka pemahaman tentang bagaimana software dan hardware berinteraksi
+                </p>
+                <div class="tech-stack-grid">
+                    <a href="https://www.arduino.cc/" target="_blank" rel="noreferrer">
+                        <img src="https://cdn.worldvectorlogo.com/logos/arduino-1.svg" alt="Arduino" class="tech-icon" title="Arduino">
+                    </a>
+                </div>
+            </div>
+
+            <div style="margin: 2rem 0;">
+                <h3 style="color: var(--color-accent); margin-bottom: 1.5rem;">🚀 Next Frontier: AI & Machine Learning</h3>
+                <p style="font-size: 0.95rem; margin-bottom: 1.5rem; color: var(--color-dark-text);">
+                    Area yang sedang saya eksplorasi untuk membawa development ke level berikutnya
+                </p>
+                <img alt="AI Development" src="https://img.shields.io/badge/AI%20Development-Evolving-blue?style=flat-square&logo=artificial-intelligence" />
+            </div>
+        </div>
+
+        <div class="gradient-divider"></div>
+
+        <!-- Connect Section -->
+        <div class="container fade-in text-center">
+            <h2 class="section-title">🤝 Mari Berkolaborasi</h2>
+            <p style="font-size: 1.1rem; margin-bottom: 1rem; color: var(--color-dark-text);">
+                Perjalanan transformasi ini tidak akan lengkap tanpa berbagi dan berkolaborasi dengan komunitas developer lainnya.
+            </p>
+            <p style="font-size: 1rem; margin-bottom: 2rem; color: var(--color-dark-text);">
+                Jika Anda tertarik untuk berdiskusi tentang front-end development, IoT, AI, atau ingin berkolaborasi dalam proyek, 
+                jangan ragu untuk terhubung!
+            </p>
+            <div class="badge-container">
+                <a href="https://github.com/yuliuspratama">
+                    <img alt="GitHub" src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" />
+                </a>
+                <a href="https://holopin.io/@yuliuspratama">
+                    <img alt="Holopin" src="https://img.shields.io/badge/Holopin-Profile-blue?style=for-the-badge&logo=holopin&logoColor=white" />
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <div class="d-flex flex-column h-100" id="footerContainer">
+        <footer class="footer mt-auto py-3 bg-primary" id="mainFooter">
+            <div class="container">
+                <div class="text-center">
+                    <img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=100&section=footer&text=💻%20Code%20with%20Passion%20%7C%20Learn%20by%20Building%20💻&fontSize=20&fontAlignY=50&animation=twinkling&fontColor=0d1117" alt="Footer" />
+                </div>
+                <div class="text-center mt-3">
+                    <p style="color: var(--color-dark-text); font-style: italic; margin-bottom: 1rem; font-size: 1.1rem;">
+                        "Setiap baris kode adalah langkah dalam perjalanan transformasi. Dari junior front-end developer hingga developer yang terus berkembang - ini adalah cerita tentang belajar, bertumbuh, dan berinovasi."
+                    </p>
+                    <span style="color: var(--color-dark-text);">Dibuat Dengan ❤ Oleh Yulius Pratama</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script>
+        // Scroll Progress Bar
+        window.addEventListener('scroll', () => {
+            const scrollProgress = document.getElementById('scrollProgress');
+            const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (window.scrollY / windowHeight) * 100;
+            scrollProgress.style.width = scrolled + '%';
+        });
+
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all fade-in elements
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Observe transition narrative
+        const transitionNarrative = document.getElementById('transitionNarrative');
+        const transitionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.3 });
+
+        if (transitionNarrative) {
+            transitionObserver.observe(transitionNarrative);
+        }
+
+        // Navigation transformation
+        const mainNav = document.getElementById('mainNav');
+        const sectionJunior = document.getElementById('sectionJunior');
+        const sectionTransition = document.getElementById('sectionTransition');
+
+        const navObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) {
+                    mainNav.classList.add('navbar-transformed');
+                } else {
+                    mainNav.classList.remove('navbar-transformed');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        if (sectionJunior) {
+            navObserver.observe(sectionJunior);
+        }
+
+        // Section transformations based on scroll
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            const windowHeight = window.innerHeight;
+            const sectionJunior = document.getElementById('sectionJunior');
+            const sectionTransition = document.getElementById('sectionTransition');
+            const portfolioCard = document.getElementById('portfolioCard');
+            const footerContainer = document.getElementById('footerContainer');
+            const mainFooter = document.getElementById('mainFooter');
+
+            // Transform section junior when scrolling
+            if (sectionJunior) {
+                const juniorRect = sectionJunior.getBoundingClientRect();
+                if (juniorRect.top < windowHeight && juniorRect.bottom > 0) {
+                    const progress = Math.min(Math.max((windowHeight - juniorRect.top) / windowHeight, 0), 1);
+                    if (progress > 0.5) {
+                        sectionJunior.classList.add('transforming');
+                    }
+                }
+            }
+
+            // Enhance portfolio card
+            if (portfolioCard && sectionTransition) {
+                const transitionRect = sectionTransition.getBoundingClientRect();
+                if (transitionRect.top < windowHeight * 0.5) {
+                    portfolioCard.classList.add('enhanced');
+                } else {
+                    portfolioCard.classList.remove('enhanced');
+                }
+            }
+
+            // Transform footer
+            if (footerContainer && sectionTransition) {
+                const transitionRect = sectionTransition.getBoundingClientRect();
+                if (transitionRect.bottom < windowHeight) {
+                    mainFooter.classList.add('footer-transformed');
+                }
+            }
+        });
+
+        // Smooth scroll behavior
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 </html>
